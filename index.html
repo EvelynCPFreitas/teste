@@ -460,21 +460,18 @@
       display: none;
     }
 
+    /* BOTAO ATUALIZADO: Quadrado e sem texto */
     .avatar-card-btn {
       flex: 0 0 auto;
-      width: 60px;
-      height: 72px;
+      width: 64px;
+      height: 64px;
       border-radius: 16px;
       background: rgba(14, 10, 36, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
+      padding: 0;
+      overflow: hidden;
       cursor: pointer;
       transition: all 0.2s ease;
-      color: #cbd5e1;
     }
 
     .avatar-card-btn:hover {
@@ -487,12 +484,6 @@
       border: 2px solid var(--accent-gold);
       box-shadow: 0 0 14px rgba(255, 209, 102, 0.35);
       transform: translateY(-2px);
-    }
-
-    .avatar-name {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
     }
 
     /* LISTA DE JOGADORES NO LOBBY */
@@ -540,11 +531,6 @@
       justify-content: center;
       border: 1px solid rgba(255, 255, 255, 0.15);
       overflow: hidden;
-    }
-
-    .player-mini-avatar svg {
-      width: 24px;
-      height: 24px;
     }
 
     .player-name-text {
@@ -748,7 +734,7 @@
           </div>
         </div>
 
-        <!-- ESCOLHA DO BONEQUINHO (AVATARES SVG) -->
+        <!-- ESCOLHA DO BONEQUINHO (AVATARES IMAGEM INDIVIDUAL) -->
         <div class="avatar-selection-box">
           <div class="section-label">
             <span>Escolha seu Personagem</span>
@@ -859,25 +845,25 @@
     animateStars();
 
     // ==========================================
-    // 2. BANCO DE BONEQUINHOS (AVATARES DA IMAGEM)
+    // 2. BANCO DE BONEQUINHOS (AVATARES IMAGEM INDIVIDUAL)
     // ==========================================
     const AVATARS = [
-      { id: 'p1', name: 'Jovem 1', bgPos: '0% 0%' },
-      { id: 'p2', name: 'Rapaz 1', bgPos: '33.33% 0%' },
-      { id: 'p3', name: 'Jovem 2', bgPos: '66.66% 0%' },
-      { id: 'p4', name: 'Rapaz 2', bgPos: '100% 0%' },
-      { id: 'p5', name: 'Mulher 1', bgPos: '0% 33.33%' },
-      { id: 'p6', name: 'Homem 1', bgPos: '33.33% 33.33%' },
-      { id: 'p7', name: 'Rapaz 3', bgPos: '66.66% 33.33%' },
-      { id: 'p8', name: 'Mulher 2', bgPos: '100% 33.33%' },
-      { id: 'p9', name: 'Garota 1', bgPos: '0% 66.66%' },
-      { id: 'p10', name: 'Garoto 1', bgPos: '33.33% 66.66%' },
-      { id: 'p11', name: 'Garoto 2', bgPos: '66.66% 66.66%' },
-      { id: 'p12', name: 'Garota 2', bgPos: '100% 66.66%' },
-      { id: 'p13', name: 'Senhor 1', bgPos: '0% 100%' },
-      { id: 'p14', name: 'Senhora 1', bgPos: '33.33% 100%' },
-      { id: 'p15', name: 'Senhor 2', bgPos: '66.66% 100%' },
-      { id: 'p16', name: 'Senhora 2', bgPos: '100% 100%' }
+      { id: 'p1', name: 'Jovem 1', file: 'p1.jpg' },
+      { id: 'p2', name: 'Rapaz 1', file: 'p2.jpg' },
+      { id: 'p3', name: 'Jovem 2', file: 'p3.jpg' },
+      { id: 'p4', name: 'Rapaz 2', file: 'p4.jpg' },
+      { id: 'p5', name: 'Mulher 1', file: 'p5.jpg' },
+      { id: 'p6', name: 'Homem 1', file: 'p6.jpg' },
+      { id: 'p7', name: 'Rapaz 3', file: 'p7.jpg' },
+      { id: 'p8', name: 'Mulher 2', file: 'p8.jpg' },
+      { id: 'p9', name: 'Garota 1', file: 'p9.jpg' },
+      { id: 'p10', name: 'Garoto 1', file: 'p10.jpg' },
+      { id: 'p11', name: 'Garoto 2', file: 'p11.jpg' },
+      { id: 'p12', name: 'Garota 2', file: 'p12.jpg' },
+      { id: 'p13', name: 'Senhor 1', file: 'p13.jpg' },
+      { id: 'p14', name: 'Senhora 1', file: 'p14.jpg' },
+      { id: 'p15', name: 'Senhor 2', file: 'p15.jpg' },
+      { id: 'p16', name: 'Senhora 2', file: 'p16.jpg' }
     ];
 
     let selectedAvatarId = 'p1';
@@ -890,13 +876,13 @@
         const btn = document.createElement('div');
         btn.className = `avatar-card-btn ${av.id === selectedAvatarId ? 'selected' : ''}`;
         
+        // Agora a div interna preenche a altura e largura totais
         btn.innerHTML = `
-          <div style="width: 44px; height: 44px; border-radius: 50%; 
-                      background-image: url('Gemini_Generated_Image_m216kxm216kxm216.jpg'); 
-                      background-size: 400% 400%; 
-                      background-position: ${av.bgPos};">
+          <div style="width: 100%; height: 100%; 
+                      background-image: url('${av.file}'); 
+                      background-size: cover; 
+                      background-position: center;">
           </div>
-          <span class="avatar-name" style="margin-top: 4px;">${av.name}</span>
         `;
         
         btn.onclick = () => {
@@ -1030,12 +1016,13 @@
         li.className = 'player-row';
         const avatarObj = AVATARS.find(a => a.id === p.avatarId) || AVATARS[0];
 
+        // Usando a imagem individual de cada jogador na lista
         li.innerHTML = `
           <div class="player-info">
             <div class="player-mini-avatar" style="
-                background-image: url('Gemini_Generated_Image_m216kxm216kxm216.jpg'); 
-                background-size: 400% 400%; 
-                background-position: ${avatarObj.bgPos};">
+                background-image: url('${avatarObj.file}'); 
+                background-size: cover; 
+                background-position: center;">
             </div>
             <div class="player-name-text">
               ${p.name} ${p.isMe ? '<span style="font-size: 0.72rem; color: #a78bfa;">(Você)</span>' : ''}
