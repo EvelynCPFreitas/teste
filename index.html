@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cidade Dorme - Noite & Mistério</title>
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at 50% 20%, #15113d 0%, #09071c 55%, #04030d 100%);
+      --glass-bg: rgba(255, 255, 255, 0.07);
+      --glass-bg-hover: rgba(255, 255, 255, 0.13);
+      --glass-border: rgba(255, 255, 255, 0.16);
+      --glass-shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.45);
+      --accent-glow: #9d72ff;
+      --accent-gold: #ffd166;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Canvas de Céu Estrelado & Nebulosa */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Silhueta Urbana Sutil */
+    .city-silhouette {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 160px;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.28;
+      background-repeat: repeat-x;
+      background-position: bottom;
+      background-size: 600px 140px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 140' preserveAspectRatio='none'%3E%3Cpath fill='%23050414' d='M0,140 L0,70 L25,70 L25,85 L40,85 L40,50 L75,50 L75,140 L90,140 L90,30 L115,30 L115,15 L120,5 L125,15 L125,30 L145,30 L145,140 L160,140 L160,65 L190,65 L190,140 L210,140 L210,40 L240,40 L240,140 L260,140 L260,80 L290,80 L290,140 L315,140 L315,20 L335,20 L335,140 L360,140 L360,55 L395,55 L395,140 L420,140 L420,35 L445,35 L445,140 L470,140 L470,75 L500,75 L500,140 L525,140 L525,45 L555,45 L555,140 L580,140 L580,60 L600,60 L600,140 Z'/%3E%3C/svg%3E");
+    }
+
+    /* Lua sutil de fundo */
+    .moon {
+      position: fixed;
+      top: 7%;
+      right: 12%;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fffdf2 0%, #ffd480 40%, rgba(255, 212, 128, 0) 70%);
+      box-shadow: 0 0 45px rgba(255, 225, 150, 0.35);
+      opacity: 0.8;
+      z-index: 1;
+      pointer-events: none;
+      filter: blur(0.5px);
+    }
+
+    /* Container Principal */
+    .main-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 480px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Logo & Título Noturno */
+    .title-box {
+      text-align: center;
+      margin-bottom: 28px;
+      animation: floatSlow 5s ease-in-out infinite;
+    }
+
+    .title-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(157, 114, 255, 0.15);
+      border: 1px solid rgba(157, 114, 255, 0.35);
+      color: #d8c2ff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      backdrop-filter: blur(8px);
+    }
+
+    .main-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(180deg, #ffffff 30%, #b8b3db 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 20px rgba(157, 114, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .main-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Telas / Cards */
+    .screen {
+      width: 100%;
+      display: none;
+      opacity: 0;
+      transform: translateY(14px) scale(0.98);
+      transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Efeito de Vidro (Glassmorphism) */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      padding: 28px 24px;
+      box-shadow: var(--glass-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Inputs em formato Pílula Estilizados */
+    .pill-input-container {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .pill-input {
+      width: 100%;
+      padding: 16px 22px 16px 48px;
+      background: rgba(16, 13, 46, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 9999px;
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 0.02em;
+      outline: none;
+      transition: all 0.25s ease;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .pill-input:focus {
+      border-color: rgba(175, 138, 255, 0.7);
+      background: rgba(22, 17, 61, 0.85);
+      box-shadow: 0 0 20px rgba(157, 114, 255, 0.35), inset 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .pill-input::placeholder {
+      color: rgba(255, 255, 255, 0.45);
+      font-weight: 500;
+      text-transform: lowercase;
+    }
+
+    .pill-input-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.4);
+      pointer-events: none;
+      display: flex;
+    }
+
+    /* Grid de Botões em Pílula (Inspirado no rascunho) */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .btn-pill {
+      padding: 14px 18px;
+      border-radius: 9999px;
+      background: var(--glass-bg);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      text-transform: lowercase;
+    }
+
+    .btn-pill:hover {
+      background: var(--glass-bg-hover);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(157, 114, 255, 0.25);
+    }
+
+    .btn-pill:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(157, 114, 255, 0.35) 0%, rgba(108, 62, 227, 0.3) 100%);
+      border-color: rgba(175, 138, 255, 0.45);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, rgba(157, 114, 255, 0.5) 0%, rgba(108, 62, 227, 0.45) 100%);
+      border-color: rgba(200, 175, 255, 0.7);
+    }
+
+    /* Modal / Gaveta de Código da Sala */
+    .join-drawer {
+      margin-top: 14px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .join-drawer.open {
+      display: flex;
+    }
+
+    /* Estilos do Lobby de Espera */
+    .room-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .room-code-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px dashed rgba(255, 255, 255, 0.25);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-family: 'Outfit', monospace;
+      font-size: 1.25rem;
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      color: var(--accent-gold);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .room-code-tag:hover {
+      background: rgba(255, 209, 102, 0.1);
+      border-color: var(--accent-gold);
+    }
+
+    .players-container {
+      width: 100%;
+      background: rgba(8, 6, 26, 0.5);
+      border-radius: 20px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 18px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .players-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .player-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      animation: slideIn 0.3s ease forwards;
+    }
+
+    .player-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .player-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
+    }
+
+    .player-name-text {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .role-badge-tag {
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: rgba(255, 209, 102, 0.15);
+      color: var(--accent-gold);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+    }
+
+    /* Painel do Narrador (Voz de Teste) */
+    .narrator-card {
+      width: 100%;
+      background: rgba(157, 114, 255, 0.08);
+      border: 1px solid rgba(157, 114, 255, 0.25);
+      border-radius: 18px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .narrator-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sound-wave {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 18px;
+    }
+
+    .wave-bar {
+      width: 3px;
+      height: 100%;
+      background: #c084fc;
+      border-radius: 3px;
+      animation: waveAnim 1s ease-in-out infinite;
+    }
+
+    .wave-bar:nth-child(2) { animation-delay: 0.2s; height: 70%; }
+    .wave-bar:nth-child(3) { animation-delay: 0.4s; height: 40%; }
+
+    .btn-test-voice {
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 9999px;
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-test-voice:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Notificação Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(20, 16, 50, 0.9);
+      border: 1px solid rgba(157, 114, 255, 0.5);
+      padding: 10px 22px;
+      border-radius: 9999px;
+      backdrop-filter: blur(12px);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Animações */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes waveAnim {
+      0%, 100% { transform: scaleY(0.4); }
+      50% { transform: scaleY(1); }
+    }
+
+    /* Responsividade */
+    @media (max-width: 480px) {
+      .main-title {
+        font-size: 2.1rem;
+      }
+      .glass-card {
+        padding: 22px 18px;
+        border-radius: 24px;
+      }
+      .actions-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Céu Estrelado Interativo com Estrelas Cintilantes -->
+  <canvas id="starfield"></canvas>
+  
+  <!-- Lua & Silhueta Noturna -->
+  <div class="moon"></div>
+  <div class="city-silhouette"></div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--accent-gold);"></i>
+    <span id="toast-text">Mensagem</span>
+  </div>
+
+  <div class="main-wrapper">
+    
+    <!-- Cabeçalho / Título do Jogo -->
+    <header class="title-box">
+      <div class="title-badge">
+        <i data-lucide="moon" style="width: 13px; height: 13px;"></i>
+        <span>Noite dos Mistérios</span>
+      </div>
+      <h1 class="main-title">CIDADE DORME</h1>
+      <p class="main-subtitle">A noite caiu. Confie em ninguém.</p>
+    </header>
+
+    <!-- TELA 1: ENTRADA (Inspirada no rascunho com visual refinado) -->
+    <section id="screen-entry" class="screen active">
+      <div class="glass-card">
+        
+        <!-- Campo Central de Username -->
+        <div class="pill-input-container">
+          <div class="pill-input-icon">
+            <i data-lucide="user" style="width: 18px; height: 18px;"></i>
+          </div>
+          <input 
+            type="text" 
+            id="input-username" 
+            class="pill-input" 
+            placeholder="username" 
+            maxlength="14" 
+            autocomplete="off" 
+            spellcheck="false"
+          >
+        </div>
+
+        <!-- Botões de Ação em Pílula (Criar Sala / Código da Sala) -->
+        <div class="actions-grid">
+          <button id="btn-create-room" class="btn-pill btn-primary">
+            <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i>
+            <span>criar sala</span>
+          </button>
+          
+          <button id="btn-toggle-join" class="btn-pill">
+            <i data-lucide="key-round" style="width: 16px; height: 16px;"></i>
+            <span>codigo da sala</span>
+          </button>
+        </div>
+
+        <!-- Gaveta para Digitar o Código -->
+        <div id="join-drawer" class="join-drawer">
+          <div class="pill-input-container" style="margin-bottom: 8px; margin-top: 6px;">
+            <div class="pill-input-icon">
+              <i data-lucide="hash" style="width: 18px; height: 18px;"></i>
+            </div>
+            <input 
+              type="text" 
+              id="input-room-code" 
+              class="pill-input" 
+              placeholder="ex: NOITE4" 
+              maxlength="8" 
+              style="letter-spacing: 0.15em; text-transform: uppercase;"
+            >
+          </div>
+          <button id="btn-join-room" class="btn-pill btn-primary" style="width: 100%;">
+            <span>Entrar no Mistério</span>
+            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TELA 2: LOBBY DE ESPERA COM NARRADOR INTEGRADO -->
+    <section id="screen-lobby" class="screen">
+      <div class="glass-card">
+        
+        <!-- Header da Sala com Código Clicável -->
+        <div class="room-header">
+          <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em;">Código de Convite</span>
+          <div class="room-code-tag" id="copy-code-btn" title="Clique para copiar">
+            <span id="display-room-code">MIDNIGHT</span>
+            <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+          </div>
+        </div>
+
+        <!-- Status do Narrador Inteligente -->
+        <div class="narrator-card">
+          <div class="narrator-info">
+            <div class="sound-wave">
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+            </div>
+            <div>
+              <div style="font-size: 0.82rem; font-weight: 700;">Celular Narrador</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">Voz ativa para toda a sala</div>
+            </div>
+          </div>
+          <button id="btn-test-narrator" class="btn-test-voice">
+            <i data-lucide="volume-2" style="width: 13px; height: 13px;"></i>
+            <span>Testar Fala</span>
+          </button>
+        </div>
+
+        <!-- Lista de Jogadores Conectados -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted);">Cidadãos Conectados</span>
+          <span id="player-count-badge" style="font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 999px;">1 / 8</span>
+        </div>
+
+        <div class="players-container">
+          <ul class="players-list" id="players-list">
+            <!-- Inserido dinamicamente via JS -->
+          </ul>
+        </div>
+
+        <!-- Botões de Ação do Host -->
+        <button id="btn-start-game" class="btn-pill btn-primary" style="width: 100%; margin-bottom: 10px;">
+          <i data-lucide="play" style="width: 16px; height: 16px;"></i>
+          <span>A Cidade Vai Dormir</span>
+        </button>
+
+        <button id="btn-leave-lobby" class="btn-pill" style="width: 100%; border: none; background: transparent; color: var(--text-muted); font-size: 0.85rem;">
+          <i data-lucide="log-out" style="width: 14px; height: 14px;"></i>
+          <span>Voltar ao Início</span>
+        </button>
+
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // Inicializar ícones Lucide
+    lucide.createIcons();
+
+    // ==========================================
+    // 1. CÉU ESTRELADO & ANIMAÇÃO DE CINTILAÇÃO (Canvas)
+    // ==========================================
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    const STAR_COUNT = 140;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      createStars();
+    }
+
+    function createStars() {
+      stars = [];
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.6 + 0.4,
+          alpha: Math.random() * 0.8 + 0.2,
+          speed: Math.random() * 0.02 + 0.005,
+          color: Math.random() > 0.4 ? '#ffffff' : (Math.random() > 0.5 ? '#ffd480' : '#bfa6ff'),
+          sparkle: Math.random() > 0.85 // Estrelas com 4 pontas desenhadas
+        });
+      }
+    }
+
+    function drawSparkle(x, y, radius, alpha, color) {
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = alpha;
+      ctx.lineWidth = 1;
+      const len = radius * 3.5;
+      ctx.beginPath();
+      ctx.moveTo(x - len, y);
+      ctx.lineTo(x + len, y);
+      ctx.moveTo(x, y - len);
+      ctx.lineTo(x, y + len);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      stars.forEach(star => {
+        star.alpha += star.speed;
+        if (star.alpha > 1 || star.alpha < 0.15) {
+          star.speed = -star.speed;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, Math.min(1, star.alpha));
+        ctx.fillStyle = star.color;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        if (star.sparkle && star.alpha > 0.6) {
+          drawSparkle(star.x, star.y, star.radius, star.alpha * 0.6, star.color);
+        }
+      });
+
+      requestAnimationFrame(animateStars);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animateStars();
+
+    // ==========================================
+    // 2. CONTROLE DE ESTADO & TELAS
+    // ==========================================
+    const screenEntry = document.getElementById('screen-entry');
+    const screenLobby = document.getElementById('screen-lobby');
+    const inputUsername = document.getElementById('input-username');
+    const inputRoomCode = document.getElementById('input-room-code');
+    const joinDrawer = document.getElementById('join-drawer');
+    const displayRoomCode = document.getElementById('display-room-code');
+    const playersListEl = document.getElementById('players-list');
+    const playerCountBadge = document.getElementById('player-count-badge');
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toast-text');
+
+    let currentRoom = "";
+    let myUsername = "";
+    let mockPlayers = [];
+
+    // Exibir Toast
+    function showToast(message) {
+      toastText.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    // Alternar gaveta para entrar com código
+    document.getElementById('btn-toggle-join').addEventListener('click', () => {
+      joinDrawer.classList.toggle('open');
+      if (joinDrawer.classList.contains('open')) {
+        inputRoomCode.focus();
+      }
+    });
+
+    // Criar Sala
+    document.getElementById('btn-create-room').addEventListener('click', () => {
+      const name = inputUsername.value.trim();
+      if (!name) {
+        showToast("Digite seu username primeiro!");
+        inputUsername.focus();
+        return;
+      }
+
+      myUsername = name;
+      currentRoom = "NOITE" + Math.floor(100 + Math.random() * 900);
+      setupLobby(true);
+    });
+
+    // Entrar na Sala com Código
+    document.getElementById('btn-join-room').addEventListener('click', () => {
+      const name = inputUsername.value.trim();
+      const code = inputRoomCode.value.trim().toUpperCase();
+
+      if (!name) {
+        showToast("Digite seu username!");
+        inputUsername.focus();
+        return;
+      }
+      if (!code || code.length < 3) {
+        showToast("Código de sala inválido!");
+        inputRoomCode.focus();
+        return;
+      }
+
+      myUsername = name;
+      currentRoom = code;
+      setupLobby(false);
+    });
+
+    // Configurar Lobby
+    function setupLobby(isHost) {
+      displayRoomCode.textContent = currentRoom;
+
+      // Mock inicial de jogadores para demonstração do layout
+      mockPlayers = [
+        { name: myUsername, role: isHost ? 'Host' : 'Jogador', isMe: true }
+      ];
+
+      if (isHost) {
+        // Simular a entrada de mais 2 jogadores para mostrar a lista fluida
+        setTimeout(() => addMockPlayer("Alice_99", "Jogador"), 1200);
+        setTimeout(() => addMockPlayer("DetetiveRox", "Jogador"), 2400);
+      }
+
+      renderPlayers();
+
+      // Troca de tela fluida
+      screenEntry.classList.remove('active');
+      setTimeout(() => {
+        screenLobby.classList.add('active');
+        lucide.createIcons();
+      }, 150);
+
+      showToast(`Bem-vindo à sala ${currentRoom}!`);
+    }
+
+    function addMockPlayer(name, role) {
+      mockPlayers.push({ name, role, isMe: false });
+      renderPlayers();
+      showToast(`${name} juntou-se à sala.`);
+    }
+
+    function renderPlayers() {
+      playersListEl.innerHTML = '';
+      playerCountBadge.textContent = `${mockPlayers.length} / 8`;
+
+      mockPlayers.forEach(p => {
+        const li = document.createElement('li');
+        li.className = 'player-row';
+        const initial = p.name.charAt(0).toUpperCase();
+
+        li.innerHTML = `
+          <div class="player-info">
+            <div class="player-avatar">${initial}</div>
+            <div class="player-name-text">${p.name} ${p.isMe ? '<span style="font-size: 0.75rem; color: #a78bfa;">(Você)</span>' : ''}</div>
+          </div>
+          <span class="role-badge-tag">${p.role}</span>
+        `;
+        playersListEl.appendChild(li);
+      });
+    }
+
+    // Copiar Código da Sala
+    document.getElementById('copy-code-btn').addEventListener('click', () => {
+      const tempInput = document.createElement('input');
+      tempInput.value = currentRoom;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      showToast("Código copiado para a área de transferência!");
+    });
+
+    // Voltar para a tela inicial
+    document.getElementById('btn-leave-lobby').addEventListener('click', () => {
+      screenLobby.classList.remove('active');
+      setTimeout(() => {
+        screenEntry.classList.add('active');
+      }, 150);
+    });
+
+    // ==========================================
+    // 3. NARRADOR POR VOZ (Web Speech API)
+    // ==========================================
+    function narrate(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'pt-BR';
+        utterance.rate = 0.95;
+        utterance.pitch = 0.9;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        showToast("Sintetizador de voz não suportado neste navegador.");
+      }
+    }
+
+    document.getElementById('btn-test-narrator').addEventListener('click', () => {
+      showToast("Narrador falando...");
+      narrate("A cidade dorme. Todos os cidadãos fechem os olhos.");
+    });
+
+    document.getElementById('btn-start-game').addEventListener('click', () => {
+      narrate("Atenção todos. A partida vai começar. A cidade dorme!");
+      showToast("Iniciando a primeira noite...");
+    });
+  </script>
+</body>
+</html>
