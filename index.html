@@ -859,42 +859,28 @@
     animateStars();
 
     // ==========================================
-    // 2. BANCO DE BONEQUINHOS (AVATARES SVG)
+    // 2. BANCO DE BONEQUINHOS (AVATARES DA IMAGEM)
     // ==========================================
     const AVATARS = [
-      {
-        id: 'cidadao',
-        name: 'Cidadão',
-        svg: `<svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" fill="#3b3363"/><circle cx="18" cy="15" r="7" fill="#fed0aa"/><ellipse cx="18" cy="10" rx="9" ry="3.5" fill="#584b7a"/><circle cx="16" cy="14" r="1.2" fill="#1e1835"/><circle cx="20" cy="14" r="1.2" fill="#1e1835"/><path d="M16 18c.8.6 3.2.6 4 0" stroke="#1e1835" stroke-width="1.2" stroke-linecap="round"/><path d="M9 32c1-7 7-8 9-8s8 1 9 8" fill="#473e6d"/></svg>`
-      },
-      {
-        id: 'frentista',
-        name: 'Frentista',
-        svg: `<svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" fill="#1e3a5f"/><circle cx="18" cy="16" r="7" fill="#fed0aa"/><path d="M10 12c0-3 4-5 8-5s8 2 8 5l-2 1h-12z" fill="#0284c7"/><path d="M12 12h14l4 2h-22z" fill="#0369a1"/><circle cx="16" cy="16" r="1.2" fill="#1e1835"/><circle cx="20" cy="16" r="1.2" fill="#1e1835"/><path d="M9 32c1-6 6-7 9-7s8 1 9 7" fill="#0284c7"/></svg>`
-      },
-      {
-        id: 'detetive',
-        name: 'Detetive',
-        svg: `<svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" fill="#4a3f35"/><circle cx="18" cy="17" r="7" fill="#fed0aa"/><path d="M9 13c1-4 4-6 9-6s8 2 9 6l-1 1H10z" fill="#786551"/><ellipse cx="18" cy="13.5" rx="12" ry="2.2" fill="#5c4d3d"/><circle cx="15.5" cy="17" r="1.2" fill="#1e1835"/><circle cx="20.5" cy="17" r="1.2" fill="#1e1835"/><path d="M9 32c1-7 6-8 9-8s8 1 9 8" fill="#786551"/><circle cx="24" cy="24" r="3.5" stroke="#ffd166" stroke-width="1.5"/><line x1="26.5" y1="26.5" x2="30" y2="30" stroke="#ffd166" stroke-width="2"/></svg>`
-      },
-      {
-        id: 'ninja',
-        name: 'Ninja',
-        svg: `<svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" fill="#18181b"/><circle cx="18" cy="16" r="7.5" fill="#27272a"/><rect x="13" y="14" width="10" height="4" rx="1.5" fill="#fed0aa"/><circle cx="15.5" cy="16" r="1" fill="#09090b"/><circle cx="20.5" cy="16" r="1" fill="#09090b"/><path d="M11 11h14v3H11z" fill="#dc2626"/><path d="M9 32c1-7 6-8 9-8s8 1 9 8" fill="#27272a"/></svg>`
-      },
-      {
-        id: 'prefeito',
-        name: 'Prefeito',
-        svg: `<svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" fill="#2d1b4e"/><circle cx="18" cy="17" r="7" fill="#fed0aa"/><rect x="13" y="6" width="10" height="7" rx="1" fill="#1e1b4b"/><ellipse cx="18" cy="13" rx="8" ry="1.8" fill="#1e1b4b"/><rect x="13" y="11" width="10" height="1.8" fill="#eab308"/><circle cx="16" cy="17" r="1.2" fill="#1e1835"/><circle cx="20" cy="17" r="1.2" fill="#1e1835"/><path d="M16 20h4" stroke="#1e1835" stroke-width="1.5" stroke-linecap="round"/><path d="M9 32c1-7 6-8 9-8s8 1 9 8" fill="#1e1b4b"/><path d="M18 24v8" stroke="#eab308" stroke-width="1.5"/></svg>`
-      },
-      {
-        id: 'barista',
-        name: 'Cafeteria',
-        svg: `<svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" fill="#38221f"/><circle cx="18" cy="16" r="7" fill="#fed0aa"/><circle cx="16" cy="15.5" r="1.2" fill="#1e1835"/><circle cx="20" cy="15.5" r="1.2" fill="#1e1835"/><path d="M12 10c2-2 10-2 12 0" stroke="#78350f" stroke-width="3" stroke-linecap="round"/><path d="M9 32c1-7 6-8 9-8s8 1 9 8" fill="#78350f"/><path d="M13 25h10v7H13z" fill="#fed7aa"/><circle cx="24" cy="27" r="2.5" stroke="#f59e0b" stroke-width="1.2"/></svg>`
-      }
+      { id: 'p1', name: 'Jovem 1', bgPos: '0% 0%' },
+      { id: 'p2', name: 'Rapaz 1', bgPos: '33.33% 0%' },
+      { id: 'p3', name: 'Jovem 2', bgPos: '66.66% 0%' },
+      { id: 'p4', name: 'Rapaz 2', bgPos: '100% 0%' },
+      { id: 'p5', name: 'Mulher 1', bgPos: '0% 33.33%' },
+      { id: 'p6', name: 'Homem 1', bgPos: '33.33% 33.33%' },
+      { id: 'p7', name: 'Rapaz 3', bgPos: '66.66% 33.33%' },
+      { id: 'p8', name: 'Mulher 2', bgPos: '100% 33.33%' },
+      { id: 'p9', name: 'Garota 1', bgPos: '0% 66.66%' },
+      { id: 'p10', name: 'Garoto 1', bgPos: '33.33% 66.66%' },
+      { id: 'p11', name: 'Garoto 2', bgPos: '66.66% 66.66%' },
+      { id: 'p12', name: 'Garota 2', bgPos: '100% 66.66%' },
+      { id: 'p13', name: 'Senhor 1', bgPos: '0% 100%' },
+      { id: 'p14', name: 'Senhora 1', bgPos: '33.33% 100%' },
+      { id: 'p15', name: 'Senhor 2', bgPos: '66.66% 100%' },
+      { id: 'p16', name: 'Senhora 2', bgPos: '100% 100%' }
     ];
 
-    let selectedAvatarId = 'cidadao';
+    let selectedAvatarId = 'p1';
 
     // Renderizar Seletor de Bonequinhos
     const avatarsContainer = document.getElementById('avatars-container');
@@ -903,15 +889,21 @@
       AVATARS.forEach(av => {
         const btn = document.createElement('div');
         btn.className = `avatar-card-btn ${av.id === selectedAvatarId ? 'selected' : ''}`;
+        
         btn.innerHTML = `
-          <div style="width: 32px; height: 32px;">${av.svg}</div>
-          <span class="avatar-name">${av.name}</span>
+          <div style="width: 44px; height: 44px; border-radius: 50%; 
+                      background-image: url('Gemini_Generated_Image_m216kxm216kxm216.jpg'); 
+                      background-size: 400% 400%; 
+                      background-position: ${av.bgPos};">
+          </div>
+          <span class="avatar-name" style="margin-top: 4px;">${av.name}</span>
         `;
+        
         btn.onclick = () => {
           selectedAvatarId = av.id;
           renderAvatarPicker();
           updateMyAvatarInList();
-          showToast(`Bonequinho "${av.name}" vestido!`);
+          showToast(`Personagem selecionado!`);
         };
         avatarsContainer.appendChild(btn);
       });
@@ -995,8 +987,8 @@
       // Configuração inicial de jogadores
       mockPlayers = [
         { name: myUsername, role: isHost ? 'HOST' : 'JOGADOR', avatarId: selectedAvatarId, isMe: true },
-        { name: 'Alice_99', role: 'JOGADOR', avatarId: 'barista', isMe: false },
-        { name: 'DetetiveRox', role: 'JOGADOR', avatarId: 'detetive', isMe: false }
+        { name: 'Alice_99', role: 'JOGADOR', avatarId: 'p2', isMe: false },
+        { name: 'DetetiveRox', role: 'JOGADOR', avatarId: 'p6', isMe: false }
       ];
 
       // Ocultar switch de cartas especiais se não for o Host
@@ -1040,7 +1032,11 @@
 
         li.innerHTML = `
           <div class="player-info">
-            <div class="player-mini-avatar">${avatarObj.svg}</div>
+            <div class="player-mini-avatar" style="
+                background-image: url('Gemini_Generated_Image_m216kxm216kxm216.jpg'); 
+                background-size: 400% 400%; 
+                background-position: ${avatarObj.bgPos};">
+            </div>
             <div class="player-name-text">
               ${p.name} ${p.isMe ? '<span style="font-size: 0.72rem; color: #a78bfa;">(Você)</span>' : ''}
             </div>
